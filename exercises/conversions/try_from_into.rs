@@ -40,21 +40,9 @@ enum IntoColorError {
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = IntoColorError;
     fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
-        let red;
-        let green;
-        let blue;
-        match u8::try_from(tuple.0) {
-            Ok(n) => red = n,
-            Err(_) => return Err(IntoColorError::IntConversion),
-        }
-        match u8::try_from(tuple.1) {
-            Ok(n) => green = n,
-            Err(_) => return Err(IntoColorError::IntConversion),
-        }
-        match u8::try_from(tuple.2) {
-            Ok(n) => blue = n,
-            Err(_) => return Err(IntoColorError::IntConversion),
-        }
+        let red = u8::try_from(tuple.0).map_err(|_|IntoColorError::IntConversion)?;
+        let green = u8::try_from(tuple.1).map_err(|_|IntoColorError::IntConversion)?;
+        let blue = u8::try_from(tuple.2).map_err(|_|IntoColorError::IntConversion)?;
         Ok(Color{red, green, blue})
     }
 }
@@ -63,21 +51,9 @@ impl TryFrom<(i16, i16, i16)> for Color {
 impl TryFrom<[i16; 3]> for Color {
     type Error = IntoColorError;
     fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
-        let red;
-        let green;
-        let blue;
-        match u8::try_from(arr[0]) {
-            Ok(n) => red = n,
-            Err(_) => return Err(IntoColorError::IntConversion),
-        }
-        match u8::try_from(arr[1]) {
-            Ok(n) => green = n,
-            Err(_) => return Err(IntoColorError::IntConversion),
-        }
-        match u8::try_from(arr[2]) {
-            Ok(n) => blue = n,
-            Err(_) => return Err(IntoColorError::IntConversion),
-        }
+        let red = u8::try_from(arr[0]).map_err(|_|IntoColorError::IntConversion)?;
+        let green = u8::try_from(arr[1]).map_err(|_|IntoColorError::IntConversion)?;
+        let blue = u8::try_from(arr[2]).map_err(|_|IntoColorError::IntConversion)?;
         Ok(Color{red, green, blue})
     }
 }
