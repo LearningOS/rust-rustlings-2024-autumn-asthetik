@@ -30,13 +30,13 @@ struct LinkedList<T> {
     end: Option<NonNull<Node<T>>>,
 }
 
-impl<T: Clone> Default for LinkedList<T> {
+impl<T> Default for LinkedList<T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<T: Clone> LinkedList<T> {
+impl<T> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -71,16 +71,30 @@ impl<T: Clone> LinkedList<T> {
             },
         }
     }
-	pub fn reverse(&mut self){
-		// TODO
-        let mut list = LinkedList::new();
-        let mut node = &self.end;
-        for _ in 0..self.length {
-            let val = unsafe { &(*node.unwrap().as_ptr()).val };
-            list.add(val.clone());
-            node = unsafe { &(*node.unwrap().as_ptr()).prev };
+	// pub fn reverse(&mut self){
+    //     let mut list = LinkedList::new();
+    //     let mut node = &self.end;
+    //     for _ in 0..self.length {
+    //         let val = unsafe { &(*node.unwrap().as_ptr()).val };
+    //         list.add(val.clone());
+    //         node = unsafe { &(*node.unwrap().as_ptr()).prev };
+    //     }
+    //     *self = list;
+	// }
+    pub fn reverse(&mut self){
+        let mut tmp_node = self.start;
+        while let Some(mut tmp) = tmp_node {
+            unsafe {
+                let mut next = tmp.as_ref().next;
+                let mut prev = tmp.as_ref().prev;
+                tmp.as_mut().next = prev;
+                tmp.as_mut().prev = next;
+                tmp_node = next;
+            }
         }
-        *self = list;
+        let mut tmp_head = self.start;
+        self.start = self.end;
+        self.end = tmp_head;
 	}
 }
 
