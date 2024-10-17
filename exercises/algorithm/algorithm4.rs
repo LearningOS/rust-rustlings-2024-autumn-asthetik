@@ -49,21 +49,19 @@ where
 
     // Insert a value into the BST
     fn insert(&mut self, value: T) {
-        if let Some(ref mut node) = self.root {
-            (*node).insert(value);
-        } else {
-            self.root = Some(Box::new(TreeNode::new(value)));
+        match self.root {
+            None => self.root = Some(Box::new(TreeNode::new(value))),
+            Some(ref mut node) => node.insert(value),
         }
     }
 
     // Search for a value in the BST
     fn search(&self, value: T) -> bool {
         let mut head = &self.root;
-        while let Some(ref node) = head {
-            let val = &node.value;
-            if value == *val {
+        while let Some(node) = head {
+            if value == node.value {
                 return true;
-            } else if value < *val {
+            } else if value < node.value {
                 head = &node.left;
             } else {
                 head = &node.right;
